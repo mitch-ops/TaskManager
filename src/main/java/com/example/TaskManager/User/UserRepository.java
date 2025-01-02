@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Data access layer
+ */
 // JpaRepository extends CrudRepository, just comes with some more methods (pagination, sorting)
 public interface UserRepository extends JpaRepository<User, UUID> {
 
