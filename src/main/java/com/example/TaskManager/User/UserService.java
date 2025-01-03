@@ -9,6 +9,8 @@ import java.util.UUID;
 /**
  * Business layer
  * Componenet is a bean
+ * This contains all the business logic it can do with a user repostory
+ * Most of thsese functions will be called from UserController from my understanding
  */
 @Component
 public class UserService {
