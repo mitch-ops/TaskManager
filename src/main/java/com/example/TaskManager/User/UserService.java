@@ -17,7 +17,11 @@ public class UserService {
 
     // Autowired means we don't have to instantiate, and we use the one already made.
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public Optional<User> getUserById(UUID id) {
         return userRepository.findById(id);
