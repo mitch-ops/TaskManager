@@ -11,11 +11,11 @@ import java.util.UUID;
  * Api layer
  */
 @RestController
-@RequestMapping(path = "/api/users")
+@RequestMapping(path = "/api/users/")
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -24,12 +24,12 @@ public class UserController {
 
     // methods
     @PostMapping // Defualt mapping is /api/users
-    public ResponseEntity<User> createUser(@PathVariable User user) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         User savedUser = userService.saveUser(user);
         return ResponseEntity.ok(savedUser);
     }
 
-    @GetMapping("/{id}/")
+    @GetMapping("{id}/")
     public ResponseEntity<User> getUserById(@PathVariable UUID id) {
         // look at database with that id
         Optional<User> user = userService.getUserById(id);

@@ -11,5 +11,11 @@ import java.util.UUID;
  */
 public interface TaskRepository extends JpaRepository<Task, UUID> {
 
+    /**
+     * Look through the Tasks table with this id and extract all tasks in assingedTo with this id
+     * @param userId
+     * @return
+     */
+    // TO-Do implement this method
     List<Task> findByAssignedTo(UUID userId);
 }
