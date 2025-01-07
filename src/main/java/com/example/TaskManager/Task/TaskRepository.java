@@ -12,10 +12,14 @@ import java.util.UUID;
 public interface TaskRepository extends JpaRepository<Task, UUID> {
 
     /**
-     * Look through the Tasks table with this id and extract all tasks in assingedTo with this id
+     * Spring data JPA automatically generates this query based on the naming convention
+     * findBy indicates a query method
+     * AssignedTo matches the assignedTo property of the Task entity
+     * So we get the JPQL query:
+     * SELECT t FROM Task t WHERE t.assignedTo = :userId
+     * where t is the alias for the Task entity
      * @param userId
      * @return
      */
-    // TO-Do implement this method
     List<Task> findByAssignedTo(UUID userId);
 }
