@@ -22,9 +22,6 @@ public class TaskRequestDTO {
     @NotBlank
     private String status; // Enum: To-Do, In Progress, Done
 
-    @FutureOrPresent
-    private LocalDateTime deadline;
-
     private UUID assignedTo; // The ID of the user assigned to the task
 
     // Constructors
@@ -35,7 +32,6 @@ public class TaskRequestDTO {
         this.description = description;
         this.priority = priority;
         this.status = status;
-        this.deadline = deadline;
         this.assignedTo = assignedTo;
     }
 
@@ -72,13 +68,13 @@ public class TaskRequestDTO {
         this.status = status;
     }
 
-    public LocalDateTime getDeadline() {
-        return deadline;
-    }
-
-    public void setDeadline(LocalDateTime deadline) {
-        this.deadline = deadline;
-    }
+//    public LocalDateTime getDeadline() {
+//        return deadline;
+//    }
+//
+//    public void setDeadline(LocalDateTime deadline) {
+//        this.deadline = deadline;
+//    }
 
     public UUID getAssignedTo() {
         return assignedTo;

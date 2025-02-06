@@ -68,6 +68,10 @@ public class Task {
         return this.taskDescription;
     }
 
+    public void setTaskDescription(String taskDescription) {
+        this.taskDescription = taskDescription;
+    }
+
     public void SetTaskDescription(String taskDescription) {
         this.taskDescription = taskDescription;
     }
