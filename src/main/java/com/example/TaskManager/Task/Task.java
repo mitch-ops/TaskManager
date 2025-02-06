@@ -47,6 +47,13 @@ public class Task {
     }
 
     // Getters and setters
+    public UUID getId() {
+        return this.id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
 
 
