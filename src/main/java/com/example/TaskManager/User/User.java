@@ -45,6 +45,14 @@ public class User {
         this.email = email;
     }
 
+    public UUID getId() {
+        return this.id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return this.username;
     }
@@ -69,5 +77,12 @@ public class User {
         this.email = email;
     }
 
+    public Role getRole() {
+        return this.role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
 }

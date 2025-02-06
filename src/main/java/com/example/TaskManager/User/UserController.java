@@ -1,5 +1,6 @@
 package com.example.TaskManager.User;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,18 +24,26 @@ public class UserController {
     }
 
     // methods
+
+    /**
+     * Create a new user
+     * @param userRequest
+     * @return the respone user
+     */
     @PostMapping // Defualt mapping is /api/users
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.saveUser(user);
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequest) {
+        UserResponseDTO savedUser = userService.createUser(userRequest);
         return ResponseEntity.ok(savedUser);
     }
 
+    /**
+     * Get a user by ID
+     * @param id
+     * @return the response user
+     */
     @GetMapping("{id}/")
-    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
-        // look at database with that id
-        Optional<User> user = userService.getUserById(id);
-        // return the response code
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable UUID id) {
+        UserResponseDTO user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
     }
 }
