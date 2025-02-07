@@ -7,6 +7,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Auth service that will authenticate users and generat JWT Tokens
+ */
 @Service
 public class AuthService {
 
@@ -24,7 +27,7 @@ public class AuthService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        if (passwordEncoder.matches(password, user.getPasswordHash())) {
+        if (passwordEncoder.matches(password, user.getPassword())) {
             return jwtUtil.generateToken(username);
         } else {
             throw new RuntimeException("Invalid credentials");
