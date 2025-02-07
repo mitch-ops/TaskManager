@@ -72,7 +72,13 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-crypto</artifactId>
-			<version>6.2.0</version> <!-- Update based on your Spring version -->
+			<version>6.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.12.6</version> <!-- Check for latest version -->
 		</dependency>
 
 
