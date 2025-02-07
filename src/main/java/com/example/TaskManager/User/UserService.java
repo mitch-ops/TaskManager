@@ -2,6 +2,7 @@ package com.example.TaskManager.User;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,11 @@ public class UserService {
     // Autowired means we don't have to instantiate, and we use the one already made.
     @Autowired
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     /**
@@ -44,10 +47,10 @@ public class UserService {
         User user = new User();
         user.setUsername(userRequest.getUsername());
         user.setEmail(userRequest.getEmail());
-        user.setPassword(userRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
         User savedUser = userRepository.save(user);
-        return toResponseDTO(user);
+        return toResponseDTO(savedUser);
     }
 
     private UserResponseDTO toResponseDTO(User user) {
@@ -59,4 +62,18 @@ public class UserService {
 
         return dto;
     }
+
+    /**
+     * Authenticat: compare hashed password with user input
+     * @param username
+     * @param rawPassword
+     * @return ture or false if it matched
+     */
+    public boolean authenticate(String username, String rawPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        return passwordEncoder.matches(rawPassword, user.getPassword());
+    }
+
 }
