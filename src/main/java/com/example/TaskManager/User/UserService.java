@@ -1,5 +1,6 @@
 package com.example.TaskManager.User;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -70,7 +71,7 @@ public class UserService {
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
-        dto.setRole(user.getRole() != null ? user.getRole().getRoleName() : "User"); // Default to "User" role
+        dto.setRole(user.getRole() != null ? user.getRole().getRoleName() : "USER"); // Default to "User" role
 
         return dto;
     }
@@ -87,5 +88,18 @@ public class UserService {
 
         return passwordEncoder.matches(rawPassword, user.getPassword());
     }
+
+    /**
+     * This will prepopulate the roles table with each being a USER
+     */
+    @PostConstruct
+    public void initializeRoles() {
+        if (roleRepository.findByRoleName("USER").isEmpty()) {
+            Role userRole = new Role("USER");
+            userRole.setRoleName("USER");
+            roleRepository.save(userRole);
+        }
+    }
+
 
 }

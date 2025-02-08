@@ -20,6 +20,8 @@ public class Role {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public Role() {}
+
     public Role(String roleName) {
         this.roleName = roleName;
     }
