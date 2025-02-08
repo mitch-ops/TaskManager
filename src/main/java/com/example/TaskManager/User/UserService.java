@@ -21,10 +21,15 @@ public class UserService {
     // Autowired means we don't have to instantiate, and we use the one already made.
     @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
+    private final RoleRepository roleRepository;
+
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -48,6 +53,13 @@ public class UserService {
         user.setUsername(userRequest.getUsername());
         user.setEmail(userRequest.getEmail());
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+
+        // Assign role (default to "USER" if not provided)
+        Role role = roleRepository.findByRoleName(userRequest.getRole())
+                .orElseGet(() -> roleRepository.findByRoleName("USER")
+                        .orElseThrow(() -> new RuntimeException("Default role 'USER' not found")));
+
+        user.setRole(role);
 
         User savedUser = userRepository.save(user);
         return toResponseDTO(savedUser);

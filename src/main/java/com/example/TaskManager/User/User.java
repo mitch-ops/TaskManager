@@ -44,6 +44,13 @@ public class User {
         this.passwordHash = password;
         this.email = email;
     }
+    @PrePersist
+    public void assignDefaultRole() {
+        if (this.role == null) {
+            this.role = new Role("USER");
+        }
+    }
+
 
     public UUID getId() {
         return this.id;

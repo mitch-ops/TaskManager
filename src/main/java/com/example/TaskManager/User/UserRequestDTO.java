@@ -6,6 +6,7 @@ public class UserRequestDTO {
     private String username;
     private String password;
     private String email;
+    private String role;
 
     // Getters and Setters
     public String getUsername() {
@@ -27,5 +28,13 @@ public class UserRequestDTO {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
