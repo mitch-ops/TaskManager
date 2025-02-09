@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -57,8 +58,33 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+//    @Bean
+//    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
+//        return new ProviderManager(List.of(new JwtAuthenticationProvider(userDetailsService, passwordEncoder())));
+//    }
+
+//    @Bean
+//    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//        authProvider.setUserDetailsService(userDetailsService);
+//        authProvider.setPasswordEncoder(passwordEncoder);
+//
+//        return new ProviderManager(List.of(authProvider));
+//    }
+
     @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
-        return new ProviderManager(List.of(new JwtAuthenticationProvider(userDetailsService, passwordEncoder())));
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder()); // Ensure it uses BCrypt
+        return authProvider;
     }
+
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        return new ProviderManager(List.of(authenticationProvider()));
+    }
+
+
+
 }

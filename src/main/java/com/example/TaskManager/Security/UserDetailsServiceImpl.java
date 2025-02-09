@@ -21,6 +21,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
+        System.out.println("Loaded User: " + user.getUsername()); // Debug
+        System.out.println("Stored Hashed Password: " + user.getPassword()); // Debug
+
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword()) // Password should be encoded in the database

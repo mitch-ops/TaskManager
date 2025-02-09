@@ -23,12 +23,14 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserService userService, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserService userService, PasswordEncoder passwordEncoder, AuthService authService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.authService = authService;
     }
 
     @PostMapping("/register")
@@ -47,11 +49,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequestDTO loginRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-        String token = jwtUtil.generateToken(loginRequest.getUsername());
-
+        String token = authService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
         return ResponseEntity.ok(Map.of("token", token));
     }
 }

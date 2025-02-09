@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +21,15 @@ import java.util.UUID;
 public class UserService {
 
     // Autowired means we don't have to instantiate, and we use the one already made.
-    @Autowired
+//    @Autowired
     private final UserRepository userRepository;
 
     @Autowired
     private final RoleRepository roleRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     /**
@@ -53,7 +51,8 @@ public class UserService {
         User user = new User();
         user.setUsername(userRequest.getUsername());
         user.setEmail(userRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+//        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setPassword(userRequest.getPassword());
 
         // Assign role (default to "USER" if not provided)
         Role role = roleRepository.findByRoleName(userRequest.getRole())
@@ -82,12 +81,12 @@ public class UserService {
      * @param rawPassword
      * @return ture or false if it matched
      */
-    public boolean authenticate(String username, String rawPassword) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        return passwordEncoder.matches(rawPassword, user.getPassword());
-    }
+//    public boolean authenticate(String username, String rawPassword) {
+//        User user = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+//
+//        return passwordEncoder.matches(rawPassword, user.getPassword());
+//    }
 
     /**
      * This will prepopulate the roles table with each being a USER
