@@ -1,7 +1,9 @@
 package com.example.TaskManager.Task;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,23 +14,24 @@ import java.util.UUID;
  * Api layer for the Task service
  */
 @RestController
-@RequestMapping(path = "/api/tasks/")
+@RequestMapping("/api/tasks/")
 public class TaskController {
 
     private final TaskService taskService;
 
-    @Autowired
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
     /**
      * Endpoint for creating a task
-     *
+     * Only admins can assign tasks
      */
-    @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        Task savedTask = taskService.saveTask(task);
+    @PostMapping("assign/")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO task) {
+        System.out.println("task title debug:" + task.getTitle());
+        TaskResponseDTO savedTask = taskService.createTask(task);
         return ResponseEntity.ok(savedTask);
     }
 
@@ -36,8 +39,8 @@ public class TaskController {
      * Endpoint for getting a list of tasks assigned to
      */
     @GetMapping("assigned/{userId}/")
-    public ResponseEntity<List<Task>> getTasksAssignedTo(@PathVariable UUID userId) {
-        List<Task> taskList = taskService.getTasksAssignedTo(userId);
+    public ResponseEntity<List<TaskResponseDTO>> getTasksAssignedTo(@PathVariable String username) {
+        List<TaskResponseDTO> taskList = taskService.getTasksAssignedTo(username);
 
         return ResponseEntity.ok(taskList);
     }
@@ -46,10 +49,9 @@ public class TaskController {
      * Endpoint for getting a task by task id
      */
     @GetMapping("{id}/")
-    public ResponseEntity<Task> getTaskByTaskId(@PathVariable UUID taskId) {
-        Optional<Task> task = taskService.getTaskById(taskId);
+    public ResponseEntity<TaskResponseDTO> getTaskByTaskId(@PathVariable String username) {
+        TaskResponseDTO task = taskService.getTaskById(username);
 
-        return task.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build()); // build or TaskNotFoundException ?>
+        return ResponseEntity.ok(task);
     }
 }

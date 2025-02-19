@@ -17,15 +17,16 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    private String password;
+    private String passwordHash;
 
     @Column(nullable = false, unique = true)
     private String email;
 
     // A single role can have many users, since we are at the users table it is many to one
     // JoinColumn specifies the foreign key, which links to the roles table
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+//    @ManyToOne
+//    @JoinColumn(name = "role_id", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     /**
@@ -41,8 +42,24 @@ public class User {
      */
     public User(String username, String password, String email) {
         this.username = username;
-        this.password = password;
+        this.passwordHash = password;
         this.email = email;
+        this.role = Role.USER;
+    }
+//    @PrePersist
+//    public void assignDefaultRole() {
+//        if (this.role == null) {
+//            this.role = Role.USER;
+//        }
+//    }
+
+
+    public UUID getId() {
+        return this.id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -54,11 +71,11 @@ public class User {
     }
 
     public String getPassword() {
-        return this.password;
+        return this.passwordHash;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.passwordHash = password;
     }
 
     public String getEmail() {
@@ -69,5 +86,12 @@ public class User {
         this.email = email;
     }
 
+    public Role getRole() {
+        return this.role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
 }

@@ -9,7 +9,7 @@ import java.util.UUID;
  * Data access layer
  * contains methods from JpaRepository that can accses the database like findByID
  */
-public interface TaskRepository extends JpaRepository<Task, UUID> {
+public interface TaskRepository extends JpaRepository<Task, String> {
 
     /**
      * Spring data JPA automatically generates this query based on the naming convention
@@ -18,8 +18,8 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
      * So we get the JPQL query:
      * SELECT t FROM Task t WHERE t.assignedTo = :userId
      * where t is the alias for the Task entity
-     * @param userId
+     * @param username
      * @return
      */
-    List<Task> findByAssignedTo(UUID userId);
+    List<Task> findByAssignedTo(String username);
 }
