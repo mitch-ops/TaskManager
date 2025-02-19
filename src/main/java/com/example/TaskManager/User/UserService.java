@@ -20,16 +20,12 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    // Autowired means we don't have to instantiate, and we use the one already made.
-//    @Autowired
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    private final RoleRepository roleRepository;
-
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -53,16 +49,25 @@ public class UserService {
         user.setEmail(userRequest.getEmail());
 //        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setPassword(userRequest.getPassword());
-
-        // Assign role (default to "USER" if not provided)
-        Role role = roleRepository.findByRoleName(userRequest.getRole())
-                .orElseGet(() -> roleRepository.findByRoleName("USER")
-                        .orElseThrow(() -> new RuntimeException("Default role 'USER' not found")));
-
-        user.setRole(role);
+        user.setRole(Role.USER);
 
         User savedUser = userRepository.save(user);
         return toResponseDTO(savedUser);
+    }
+
+    /**
+     * Promote user to admin
+     * @param userId
+     * @return
+     */
+    public UserResponseDTO promoteToAdmin(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        user.setRole(Role.ADMIN);
+        userRepository.save(user);
+
+        return toResponseDTO(user);
     }
 
     private UserResponseDTO toResponseDTO(User user) {
@@ -70,35 +75,9 @@ public class UserService {
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
-        dto.setRole(user.getRole() != null ? user.getRole().getRoleName() : "USER"); // Default to "User" role
+        dto.setRole(user.getRole().name()); // convert enum to string
 
         return dto;
     }
-
-    /**
-     * Authenticat: compare hashed password with user input
-     * @param username
-     * @param rawPassword
-     * @return ture or false if it matched
-     */
-//    public boolean authenticate(String username, String rawPassword) {
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-//
-//        return passwordEncoder.matches(rawPassword, user.getPassword());
-//    }
-
-    /**
-     * This will prepopulate the roles table with each being a USER
-     */
-    @PostConstruct
-    public void initializeRoles() {
-        if (roleRepository.findByRoleName("USER").isEmpty()) {
-            Role userRole = new Role("USER");
-            userRole.setRoleName("USER");
-            roleRepository.save(userRole);
-        }
-    }
-
 
 }

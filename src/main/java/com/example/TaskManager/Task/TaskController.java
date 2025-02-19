@@ -3,6 +3,7 @@ package com.example.TaskManager.Task;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,9 +25,10 @@ public class TaskController {
 
     /**
      * Endpoint for creating a task
-     *
+     * Only admins can assign tasks
      */
-    @PostMapping
+    @PostMapping("/assign")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO task) {
         TaskResponseDTO savedTask = taskService.createTask(task);
         return ResponseEntity.ok(savedTask);

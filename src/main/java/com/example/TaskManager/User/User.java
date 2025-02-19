@@ -24,8 +24,9 @@ public class User {
 
     // A single role can have many users, since we are at the users table it is many to one
     // JoinColumn specifies the foreign key, which links to the roles table
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+//    @ManyToOne
+//    @JoinColumn(name = "role_id", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     /**
@@ -43,13 +44,14 @@ public class User {
         this.username = username;
         this.passwordHash = password;
         this.email = email;
+        this.role = Role.USER;
     }
-    @PrePersist
-    public void assignDefaultRole() {
-        if (this.role == null) {
-            this.role = new Role("USER");
-        }
-    }
+//    @PrePersist
+//    public void assignDefaultRole() {
+//        if (this.role == null) {
+//            this.role = Role.USER;
+//        }
+//    }
 
 
     public UUID getId() {

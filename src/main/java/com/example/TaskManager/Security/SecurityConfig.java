@@ -40,12 +40,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // Allow public access to auth endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // Only admin can access this
+                        .requestMatchers("/api/tasks/assign").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build(); // `.and()` is removed; just use `build()`
+        return http.build();
     }
 
     @Bean
