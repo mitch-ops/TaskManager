@@ -14,7 +14,7 @@ import java.util.UUID;
  * Api layer for the Task service
  */
 @RestController
-@RequestMapping(path = "/api/tasks/")
+@RequestMapping("/api/tasks/")
 public class TaskController {
 
     private final TaskService taskService;
@@ -27,9 +27,10 @@ public class TaskController {
      * Endpoint for creating a task
      * Only admins can assign tasks
      */
-    @PostMapping("/assign")
+    @PostMapping("assign/")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO task) {
+        System.out.println("task title debug:" + task.getTitle());
         TaskResponseDTO savedTask = taskService.createTask(task);
         return ResponseEntity.ok(savedTask);
     }
@@ -38,8 +39,8 @@ public class TaskController {
      * Endpoint for getting a list of tasks assigned to
      */
     @GetMapping("assigned/{userId}/")
-    public ResponseEntity<List<TaskResponseDTO>> getTasksAssignedTo(@PathVariable UUID userId) {
-        List<TaskResponseDTO> taskList = taskService.getTasksAssignedTo(userId);
+    public ResponseEntity<List<TaskResponseDTO>> getTasksAssignedTo(@PathVariable String username) {
+        List<TaskResponseDTO> taskList = taskService.getTasksAssignedTo(username);
 
         return ResponseEntity.ok(taskList);
     }
@@ -48,8 +49,8 @@ public class TaskController {
      * Endpoint for getting a task by task id
      */
     @GetMapping("{id}/")
-    public ResponseEntity<TaskResponseDTO> getTaskByTaskId(@PathVariable UUID taskId) {
-        TaskResponseDTO task = taskService.getTaskById(taskId);
+    public ResponseEntity<TaskResponseDTO> getTaskByTaskId(@PathVariable String username) {
+        TaskResponseDTO task = taskService.getTaskById(username);
 
         return ResponseEntity.ok(task);
     }

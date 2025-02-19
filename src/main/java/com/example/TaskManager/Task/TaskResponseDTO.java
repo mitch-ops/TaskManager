@@ -20,7 +20,7 @@ public class TaskResponseDTO {
     private String status;
     private LocalDateTime deadline;
 
-    private UUID assignedTo; // The ID of the assigned user
+    private String assignedTo; // The ID of the assigned user
     private String assignedToUsername; // The username of the assigned user
 
     private LocalDateTime createdAt;
@@ -29,7 +29,7 @@ public class TaskResponseDTO {
     // Constructors
     public TaskResponseDTO() {}
 
-    public TaskResponseDTO(UUID id, String title, String description, String priority, String status, LocalDateTime deadline, UUID assignedTo, String assignedToUsername, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public TaskResponseDTO(UUID id, String title, String description, String priority, String status, LocalDateTime deadline, String assignedTo, String assignedToUsername, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -91,11 +91,11 @@ public class TaskResponseDTO {
         this.deadline = deadline;
     }
 
-    public UUID getAssignedTo() {
+    public String getAssignedTo() {
         return assignedTo;
     }
 
-    public void setAssignedTo(UUID assignedTo) {
+    public void setAssignedTo(String assignedTo) {
         this.assignedTo = assignedTo;
     }
 

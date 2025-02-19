@@ -31,7 +31,7 @@ public class Task {
     @Column(nullable = false)
     private UUID createdBy;
 
-    private UUID assignedTo;
+    private String assignedTo;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -100,11 +100,11 @@ public class Task {
         this.createdBy = createdBy;
     }
 
-    public UUID getAssignedTo() {
+    public String getAssignedTo() {
         return this.assignedTo;
     }
 
-    public void setAssignedTo(UUID assignedTo) {
+    public void setAssignedTo(String assignedTo) {
         this.assignedTo = assignedTo;
     }
 
