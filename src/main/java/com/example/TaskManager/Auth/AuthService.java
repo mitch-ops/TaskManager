@@ -30,65 +30,6 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-//    public String authenticate(String username, String password) {
-//        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//        return jwtUtil.generateToken(userDetails.getUsername());
-//    }
-
-//    public String authenticate(String username, String password) {
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//
-//        System.out.println("Entered Password: " + password);
-//        System.out.println("Stored Hashed Password: " + userDetails.getPassword());
-//        System.out.println("Password Matches: " + passwordEncoder.matches(password, userDetails.getPassword()));
-//
-//
-//        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-//            throw new RuntimeException("Invalid credentials");
-//        }
-//
-//        return jwtUtil.generateToken(userDetails.getUsername());
-//    }
-
-// Best i got so far
-//    public String authenticate(String username, String password) {
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(username, password)
-//        );
-//
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//
-//        String token = jwtUtil.generateToken(userDetails.getUsername());
-//
-//        System.out.println("Generated JWT Token: " + token); // Debugging
-//
-//        return token;
-//    }
-
-//    public String authenticate(String username, String password) {
-//        System.out.println("Starting authentication for user: " + username);
-//
-//        Authentication authentication;
-//        try {
-//            authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(username, password)
-//            );
-//            System.out.println("Authentication successful!");
-//        } catch (Exception e) {
-//            System.out.println("Authentication failed: " + e.getMessage());
-//            return null; // Or throw an exception
-//        }
-//
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        System.out.println("Loaded UserDetails: " + userDetails.getUsername());
-//
-//        String token = jwtUtil.generateToken(userDetails.getUsername());
-//        System.out.println("Generated JWT Token: " + token);
-//
-//        return token;
-//    }
-
     public String authenticate(String username, String password) {
         System.out.println("Starting authentication for user: " + username);
 
@@ -108,16 +49,15 @@ public class AuthService {
             authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
-            System.out.println("✅ Authentication successful!");
+            System.out.println("Authentication successful!");
         } catch (Exception e) {
-            System.out.println("❌ Authentication failed: " + e.getMessage());
+            System.out.println("Authentication failed: " + e.getMessage());
             return null; // Or throw an exception
         }
 
         System.out.println("🔹 Loaded UserDetails: " + authentication.getPrincipal());
 
         String token = jwtUtil.generateToken(userDetails.getUsername());
-        System.out.println("🔑 Generated JWT Token: " + token);
 
         return token;
     }
